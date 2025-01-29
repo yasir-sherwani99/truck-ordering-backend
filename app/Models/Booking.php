@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Booking extends Model
 {
@@ -29,5 +30,50 @@ class Booking extends Model
         'message',
         'status'
     ];
+
+    /*
+    |-------------------------------------------------------------------
+    | MUTATORS
+    |-------------------------------------------------------------------
+    */
+    public function setPickupDateAttribute($value)
+    {
+        $this->attributes['pickup_date'] = Carbon::parse($value)->format("Y-m-d");
+    }
+
+    public function setDeliveryDateAttribute($value)
+    {
+        $this->attributes['delivery_date'] = Carbon::parse($value)->format("Y-m-d");
+    }
+
+    /*
+    |-------------------------------------------------------------------
+    | ACCESSORS
+    |-------------------------------------------------------------------
+    */
+    public function getPickupDateAttribute($value)
+    {
+        return Carbon::parse($value)->toFormattedDateString();
+    }
+
+    public function getDeliveryDateAttribute($value)
+    {
+        return Carbon::parse($value)->toFormattedDateString();
+    }
+
+    /*
+    |-------------------------------------------------------------------
+    | SCOPES
+    |-------------------------------------------------------------------
+    */
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    public function scopeDelivered($query)
+    {
+        return $query->where('status', 'delivered');
+    }
 }
 

@@ -1,46 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
-use App\Models\User;
-use App\Http\Requests\UserStoreRequest;
-// use App\Http\Requests\LoginRequest;
+use App\Models\Admin;
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    public function register(UserStoreRequest $request)
-    {
-        $user = new User();
-        
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-
-        $user->save();
-
-        // authenticate user
-        Auth::attempt($request->only('email', 'password'));
-        $token = $user->createToken('truckUserToken')->plainTextToken;
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Well-done! You are loggedin successfully',
-            'accessToken' => $token
-        ], 200);
-    }
-
     /**
      * Authenticate user
      *
@@ -50,7 +20,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|string|exists:users,email',
+            'email' => 'required|email|string|exists:admins,email',
             'password' => 'required|string',
         ]);
 
@@ -59,16 +29,16 @@ class AuthController extends Controller
         }
 
          // attempt to log the user in using email and password
-        if(Auth::attempt($request->only('email', 'password'))) {
+        if(Auth::guard('admin')->attempt($request->only('email', 'password'))) {
             
-            $user = User::where('email', $request->email)->first();
-            $token = $user->createToken('truckUserToken')->plainTextToken;
+            $admin = Admin::where('email', $request->email)->first();
+            $token = $admin->createToken('truckAdminToken')->plainTextToken;
 
             return response()->json([
                 'success' => true,
                 'message' => 'Well-done! You are loggedin successfully',
                 'accessToken' => $token,
-                'user' => $user
+                'admin' => $admin
             ], 200);
         } else {
              // if authentication fails, add a custom validation error
@@ -80,7 +50,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Logout user (revoke the token).
+     * Logout admin (revoke the token).
      *
      * @return [string] message
      */
@@ -92,5 +62,15 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'You are logged out successfully'
         ], 200);
+    }
+
+    /**
+     * Get the guard to be used during authentication
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard;
+     */
+    protected function guard()
+    {
+        return Auth::guard('admin');
     }
 }

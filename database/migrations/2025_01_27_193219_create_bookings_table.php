@@ -27,7 +27,7 @@ return new class extends Migration
             $table->date('pickup_date');
             $table->date('delivery_date');
             $table->string('message', 500)->nullable();
-            $table->enum('status', ['pending', 'in_progress', 'delivered', 'canceled'])->default('pending');
+            $table->enum('status', ['pending', 'inprogress', 'delivered', 'cancel'])->default('pending');
             $table->timestamps();
         });
     }

@@ -31,7 +31,8 @@ class BookingStoreRequest extends FormRequest
             'delivery_address' => 'required|string|max:191',
             'cargo_type' => 'required|string',
             'cargo_weight' => 'required|string',
-            'truck_type' => 'required|integer',
+            'truck_type' => 'required|string',
+            'truck_qty' => 'required|integer',
             'pickup_date' => 'required|date',
             'delivery_date' => 'required|date',
             'message' => 'nullable|string|max:500'
