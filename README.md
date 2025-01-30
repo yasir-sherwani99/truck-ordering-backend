@@ -1,6 +1,15 @@
 ## Truck Ordering App Backend in Laravel 11
 
-#### Installation:
+This is the backend API for the Truck Ordering App, built with Laravel. The app allows customers to book trucks, track their bookings and manage account, while admin can view all bookings and update their status.
+
+### Requirements:
+
+- PHP >= 8.2
+- Composer
+- MySQL (or another supported database)
+- Laravel 11.x 
+
+### Installation:
 
 1. Clone the Git Repository<br />
 git clone [https://github.com/yasir-sherwani99/truck-ordering-backend.git](https://github.com/yasir-sherwani99/truck-ordering-backend.git) 
@@ -29,16 +38,16 @@ php artisan db:seed
 7. Start the Development Server<br />
 php artisan serve
 
-#### Features:
+### Features:
 
 - **User Authentication:** Users can signup, login and manager their accounts using Laravel Sanctum for API Authentication
 - **Booking Management:** Customers can create, update and view booking status
 - **Admin Management:** Admin can view bookings, received notifications on new bookings, update bookings status and communicate via email regarding their orders
 
 
-#### Explanation:
+### Explanation:
 
-##### Authentication 
+#### Authentication 
 
 The app uses Laravel Sanctum for API authentication. You can register and authenticate users via the following routes:
 
@@ -46,9 +55,9 @@ The app uses Laravel Sanctum for API authentication. You can register and authen
 - **POST** /api/login: Login an existing user and retrieve an API token.
 - **GET** /api/logout: Logout an existing user and delete an API token.
 
-##### Routes
+#### Routes
 
-###### Bookings
+##### Bookings
 
 - **POST** /api/booking: Create a new booking for trucks.
 
@@ -59,7 +68,7 @@ Booking status options
 - In Progress
 - Cancel
 
-###### Admin
+##### Admin
 
 - **POST** /api/admin/login: Login an existing admin and retrieve an API token.
 - **GET** /api/admin/logout: Logout an existing admin and delete an API token.
